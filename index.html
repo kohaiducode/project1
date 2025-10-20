@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- =======================
+       Meta & Head
+       Responsive, accessible, engineer‑friendly visual design
+       ======================= -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GAS × Shopify Automation | Freelance</title>
+    <meta name="description"
+        content="Google Apps Script × Shopify automation services: sheets sync, reporting, API integrations, and lightweight back‑office automations." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* ===== Design Tokens ===== */
+            --bg: #0a0d12;
+            /* page background */
+            --surface: #0f141b;
+            /* elevated surface */
+            --card: #111824;
+            /* card background */
+            --muted: #95a7bf;
+            /* secondary text */
+            --text: #e9f1ff;
+            /* primary text */
+            --brand: #5ad08a;
+            /* primary accent */
+            --brand-2: #4cc9f0;
+            /* secondary accent */
+            --line: #1b2636;
+            /* borders */
+            --ok: #80ed99;
+            /* success */
+            --warn: #ffb703;
+            /* warning */
+
+            --radius: 16px;
+            /* default radius */
+            --radius-lg: 24px;
+            /* large radius */
+            --shadow-lg: 0 18px 40px rgba(0, 0, 0, .40);
+            --shadow: 0 10px 26px rgba(0, 0, 0, .28);
+
+            --maxw: 1200px;
+            /* content width */
+            --gutter: 22px;
+            /* grid gap */
+        }
+
+        /* ===== Base ===== */
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, Sego UI, Roboto, Arial, sans-serif;
+            line-height: 1.65
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            height: auto
+        }
+
+        a {
+            color: var(--brand);
+            text-underline-offset: 3px
+        }
+
+        .container {
+            max-width: var(--maxw);
+            margin-inline: auto;
+            padding-inline: clamp(16px, 3vw, 28px)
+        }
+
+        .section {
+            padding-block: clamp(56px, 8vw, 96px);
+            border-top: 1px solid var(--line)
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.15;
+            margin: 0 0 12px
+        }
+
+        h1 {
+            font-size: clamp(28px, 4.8vw, 54px);
+            font-weight: 800
+        }
+
+        h2 {
+            font-size: clamp(22px, 3.2vw, 36px);
+            font-weight: 800
+        }
+
+        h3 {
+            font-size: clamp(18px, 2.2vw, 24px);
+            font-weight: 700
+        }
+
+        p {
+            margin: 0 0 12px;
+            color: #d7e6ffcc
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .mono {
+            font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, monospace
+        }
+
+        /* ===== Utilities ===== */
+        .grid {
+            display: grid;
+            gap: var(--gutter)
+        }
+
+        .cols-2 {
+            grid-template-columns: 1.15fr .85fr
+        }
+
+        .cols-3 {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .cols-4 {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        @media (max-width:1024px) {
+
+            .cols-2,
+            .cols-3,
+            .cols-4 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow)
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            border-radius: 999px;
+            font-size: 12px
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .kicker {
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 12px
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            color: #05101a;
+            text-decoration: none;
+            padding: 14px 18px;
+            font-weight: 800;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform .15s ease, opacity .15s ease
+        }
+
+        .btn:hover {
+            transform: translateY(-2px)
+        }
+
+        .btn.outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--line)
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0c121a;
+            border: 1px solid var(--line);
+            padding: 8px 12px;
+            border-radius: 999px
+        }
+
+        .spacer {
+            height: 10px
+        }
+
+        .center {
+            text-align: center
+        }
+
+        /* ===== Nav (Responsive) ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 13, 18, .88);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .navwrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900
+        }
+
+        .logo .dot {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            border-radius: 50%
+        }
+
+        .navlinks {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .navlinks a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 8px
+        }
+
+        .navlinks a:hover {
+            background: #0d1520
+        }
+
+        .nav-toggle {
+            display: none
+        }
+
+        @media (max-width:820px) {
+            .navlinks {
+                display: none;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 56px;
+                background: var(--surface);
+                border-bottom: 1px solid var(--line);
+                padding: 12px
+            }
+
+            .navlinks.open {
+                display: flex;
+                flex-direction: column
+            }
+
+            .nav-toggle {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 10px;
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                background: #0d1520;
+                color: var(--text)
+            }
+        }
+
+        /* ===== Section: Hero ===== */
+        .hero {
+            padding-block: clamp(84px, 10vw, 120px);
+            background: radial-gradient(1200px 400px at 20% -20%, rgba(76, 201, 240, .08), transparent), radial-gradient(1200px 600px at 120% -40%, rgba(90, 208, 138, .10), transparent)
+        }
+
+        .hero .wrap {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: var(--gutter);
+            align-items: center
+        }
+
+        @media (max-width:1024px) {
+            .hero .wrap {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .hero h1 strong {
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent
+        }
+
+        /* ===== Section: Pricing ===== */
+        .price {
+            font-size: 32px;
+            font-weight: 900
+        }
+
+        .price small {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600
+        }
+
+        .card ul {
+            margin: 12px 0 0;
+            padding: 0 0 0 18px
+        }
+
+        .card li {
+            margin: 6px 0
+        }
+
+        /* ===== Section: Portfolio ===== */
+        .portfolio .card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .thumb {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a2331, #0f1520);
+            border: 1px dashed #223048;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            color: var(--muted)
+        }
+
+        /* ===== Section: About ===== */
+        .about {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: var(--gutter);
+            align-items: center
+        }
+
+        @media (max-width:1024px) {
+            .about {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .avatar {
+            inline-size: 100%;
+            max-width: 360px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-lg)
+        }
+
+        /* ===== Section: GAS Explainer ===== */
+        .flow {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: var(--gutter);
+            align-items: center
+        }
+
+        @media (max-width:1024px) {
+            .flow {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .diagram {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 20px
+        }
+
+        /* ===== Section: Contact ===== */
+        form {
+            display: grid;
+            gap: 12px
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            background: #0f1520;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: var(--text);
+            font: inherit
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            padding: 30px 0;
+            color: var(--muted);
+            border-top: 1px solid var(--line)
+        }
+
+        /* ===== Misc ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0
+        }
+
+        #toTop {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: #121822;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px 12px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: none
+        }
+
+        /* Offset anchors for sticky header */
+        :target {
+            scroll-margin-top: 80px
+        }
+    </style>
+</head>
+
+<body>
+    <!-- =======================
+       Skip Link for Accessibility
+       ======================= -->
+    <a class="sr-only" href="#main">Skip to content</a>
+
+    <!-- =======================
+       Header / Navigation (Distinct Section)
+       ======================= -->
+    <header>
+        <nav class="container navwrap" aria-label="Primary">
+            <div class="logo">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="mono">GAS × Shopify</span>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">Menu ▾</button>
+            <div class="navlinks" id="navLinks">
+                <a href="#services">Services</a>
+                <a href="#why">Why Me</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#portfolio">Examples</a>
+                <a href="#about">About</a>
+                <a href="#gas">What is GAS?</a>
+                <a href="#contact" class="btn" style="padding:8px 12px">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <!-- ===== Section: Hero ===== -->
+        <section class="hero" id="home" aria-labelledby="heroTitle">
+            <div class="container wrap">
+                <div>
+                    <span class="kicker">Google Apps Script × Shopify</span>
+                    <h1 id="heroTitle">Automate your store ops<br>and <strong>win back your time</strong>.</h1>
+                    <p class="muted">Inventory sync, order flows, reporting, and CRM bridges — built with cost‑efficient
+                        Apps Script. Ideal for SMEs that need practical automation without heavy infrastructure.</p>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px">
+                        <a href="#contact" class="btn">Free Consultation</a>
+                        <a href="#portfolio" class="btn outline">See Examples</a>
+                    </div>
+                    <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
+                        <div class="pill"><span>✅</span> Fast & flexible delivery</div>
+                        <div class="pill"><span>💸</span> No server fees</div>
+                        <div class="pill"><span>🔗</span> Shopify + Google + APIs</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card" aria-label="Key stats">
+                        <div class="grid cols-3">
+                            <div>
+                                <div class="mono" style="font-weight:800;font-size:22px">30+</div>
+                                <div class="muted">automations</div>
+                            </div>
+                            <div>
+                                <div class="mono" style="font-weight:800;font-size:22px">5–20h</div>
+                                <div class="muted">time saved / mo</div>
+                            </div>
+                            <div>
+                                <div class="mono" style="font-weight:800;font-size:22px">¥0</div>
+                                <div class="muted">server costs</div>
+                            </div>
+                        </div>
+                        <div class="spacer"></div>
+                        <div class="chips">
+                            <span class="tag">Sheets ⇄ Shopify</span>
+                            <span class="tag">GA4 reports</span>
+                            <span class="tag">Discord/Slack alerts</span>
+                            <span class="tag">Email/Omnisend</span>
+                            <span class="tag">Back‑office bots</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: Services (What I Do) ===== -->
+        <section class="section" id="services" aria-labelledby="servicesTitle">
+            <div class="container">
+                <h2 id="servicesTitle">Services</h2>
+                <p class="muted">Concrete automations that eliminate repetitive work and reduce errors.</p>
+                <div class="grid cols-3" style="margin-top:16px">
+                    <div class="card">
+                        <h3>Sheets ⇄ Shopify Sync</h3>
+                        <p>Push inventory, price, SKU attributes from Google Sheets to Shopify, and pull orders/products
+                            back for analysis.</p>
+                        <ul>
+                            <li>SKU/variant stock updates</li>
+                            <li>Bulk price & compare‑at edits</li>
+                            <li>New product CSV → API importer</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Automated Reporting</h3>
+                        <p>Daily/weekly KPIs delivered to a Sheet or email: sales, AOV, conversion, top SKUs, cohort
+                            summaries.</p>
+                        <ul>
+                            <li>GA4 + Shopify blended metrics</li>
+                            <li>Scheduled email/PDF snapshots</li>
+                            <li>Owner‑friendly dashboards</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Notifications & Workflows</h3>
+                        <p>Trigger Slack/Discord/Email on order events, payment issues, low stock, VIP orders, or fraud
+                            flags.</p>
+                        <ul>
+                            <li>Low‑stock threshold alerts</li>
+                            <li>High‑value order routing</li>
+                            <li>Abandoned checkout nudges</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Marketing & CRM Bridges</h3>
+                        <p>Sync segments to Omnisend/Mailchimp, enrich leads from forms, and keep subscriber lists tidy.
+                        </p>
+                        <ul>
+                            <li>Customer tags & segments</li>
+                            <li>Form → Sheet → ESP pipeline</li>
+                            <li>Coupon issuance automation</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Back‑Office Automation</h3>
+                        <p>Cut manual copy‑paste in procurement, returns, and fulfilment using Apps Script + Drive +
+                            Docs.</p>
+                        <ul>
+                            <li>Purchase order generators</li>
+                            <li>Packing slip/label merges</li>
+                            <li>RMA logging flows</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Custom Integrations</h3>
+                        <p>Tailored scripts across Google APIs and third‑party services with secure auth and error
+                            handling.</p>
+                        <ul>
+                            <li>Custom endpoints & webhooks</li>
+                            <li>Rate‑limit friendly queues</li>
+                            <li>Error logs with retries</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: Why Me ===== -->
+        <section class="section" id="why" aria-labelledby="whyTitle">
+            <div class="container">
+                <h2 id="whyTitle">Why Work With Me</h2>
+                <div class="grid cols-3" style="margin-top:16px">
+                    <div class="card">
+                        <h3>Lean & Cost‑efficient</h3>
+                        <p>Apps Script runs in Google’s cloud — no server bills. Ideal for SMEs needing ROI from day
+                            one.</p>
+                    </div>
+                    <div class="card">
+                        <h3>EC + Data Literacy</h3>
+                        <p>Hands‑on experience with Shopify ops, GA4, and analytics ensures we automate what truly
+                            matters.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Flexible Freelance Delivery</h3>
+                        <p>Direct communication, faster iteration, and solutions shaped to your workflow and team size.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: Pricing ===== -->
+        <section class="section" id="pricing" aria-labelledby="pricingTitle">
+            <div class="container">
+                <h2 id="pricingTitle">Pricing</h2>
+                <p class="muted">Simple starting points — final quotes depend on scope. First consultation is free.</p>
+                <div class="grid cols-3" style="margin-top:16px">
+                    <div class="card">
+                        <div class="badge">Starter</div>
+                        <h3>Small Link</h3>
+                        <div class="price">¥10,000–¥30,000 <small>/ one‑off</small></div>
+                        <p>One Sheet ⇄ Shopify task or minor automation.</p>
+                        <ul>
+                            <li>1 automation (low complexity)</li>
+                            <li>Email support 7 days</li>
+                            <li>Docs & quick how‑to</li>
+                        </ul>
+                        <div class="spacer"></div>
+                        <a href="#contact" class="btn" aria-label="Contact about Starter">Get started</a>
+                    </div>
+                    <div class="card" style="border:1px solid rgba(76,201,240,.45)">
+                        <div class="badge"
+                            style="color:#041016;background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none">
+                            Popular</div>
+                        <h3>Growth Bundle</h3>
+                        <div class="price">¥30,000–¥90,000 <small>/ project</small></div>
+                        <p>Multiple tasks: sync + reporting + notifications.</p>
+                        <ul>
+                            <li>2–4 automations (mid complexity)</li>
+                            <li>Handover call & short training</li>
+                            <li>14‑day tweak window</li>
+                        </ul>
+                        <div class="spacer"></div>
+                        <a href="#contact" class="btn" aria-label="Contact about Growth">Request a quote</a>
+                    </div>
+                    <div class="card">
+                        <div class="badge">Support</div>
+                        <h3>Care Plan</h3>
+                        <div class="price">¥5,000+ <small>/ month</small></div>
+                        <p>Keep scripts healthy with logs, retries, and small improvements.</p>
+                        <ul>
+                            <li>Monitoring & error emails</li>
+                            <li>Monthly tune‑ups (SLA by tier)</li>
+                            <li>Roadmap suggestions</li>
+                        </ul>
+                        <div class="spacer"></div>
+                        <a href="#contact" class="btn outline" aria-label="Contact about Care Plan">Talk maintenance</a>
+                    </div>
+                </div>
+                <p class="muted" style="margin-top:12px">*Final pricing depends on data volume, API limits, security,
+                    and workflow complexity.</p>
+            </div>
+        </section>
+
+        <!-- ===== Section: Portfolio / Examples ===== -->
+        <section class="section portfolio" id="portfolio" aria-labelledby="portfolioTitle">
+            <div class="container">
+                <h2 id="portfolioTitle">Examples</h2>
+                <div class="grid cols-3" style="margin-top:16px">
+                    <div class="card">
+                        <div class="thumb">16:9 Preview</div>
+                        <h3>Morning Stock Sync</h3>
+                        <p>Every 06:00, update Shopify inventory from a shared Sheet. Includes rate‑limit queue and
+                            change log.</p>
+                        <div class="chips"><span class="tag">Inventory</span><span class="tag">Triggers</span><span
+                                class="tag">Logs</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="thumb">16:9 Preview</div>
+                        <h3>Sales Snapshot Email</h3>
+                        <p>Daily email with GA4 + Shopify KPIs, sent as HTML table and PDF attachment for managers.</p>
+                        <div class="chips"><span class="tag">GA4</span><span class="tag">Email</span><span
+                                class="tag">PDF</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="thumb">16:9 Preview</div>
+                        <h3>Discord Order Alerts</h3>
+                        <p>Notify channel on high‑value orders or payment failures with direct links for quick action.
+                        </p>
+                        <div class="chips"><span class="tag">Discord</span><span class="tag">Webhook</span><span
+                                class="tag">Rules</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: About ===== -->
+        <section class="section" id="about" aria-labelledby="aboutTitle">
+            <div class="container about">
+                <img class="avatar"
+                    src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1200&auto=format&fit=crop"
+                    alt="Portrait placeholder" />
+                <div>
+                    <h2 id="aboutTitle">About</h2>
+                    <p>Hello, I’m <strong>Alex (Goat) Alexandre</strong> — a multilingual freelancer helping SMEs
+                        automate Shopify operations using Google Apps Script.</p>
+                    <p>Background in cross‑border EC marketing, localization project management, and analytics. I focus
+                        on practical automation that your team can own after handover.</p>
+                    <div class="chips">
+                        <span class="tag">English · 日本語 · Français</span>
+                        <span class="tag">Shopify Admin/API</span>
+                        <span class="tag">Google Workspace</span>
+                        <span class="tag">Process Design</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: What is GAS ===== -->
+        <section class="section" id="gas" aria-labelledby="gasTitle">
+            <div class="container flow">
+                <div>
+                    <h2 id="gasTitle">What is Google Apps Script?</h2>
+                    <p>Apps Script is Google’s scripting platform to automate tasks across Workspace (Sheets, Gmail,
+                        Drive, Docs, etc.). It runs in the cloud, so there’s no server to maintain, and it’s perfect for
+                        lightweight EC automations.</p>
+                    <ul>
+                        <li>Connect Shopify with Sheets/Drive/Gmail easily</li>
+                        <li>Schedule jobs or react to webhooks</li>
+                        <li>Keep running costs low</li>
+                    </ul>
+                </div>
+                <div class="diagram" aria-label="Integration diagram">
+                    <svg viewBox="0 0 680 280" width="100%" height="100%" role="img"
+                        aria-labelledby="flowTitle flowDesc">
+                        <title id="flowTitle">GAS Integration Diagram</title>
+                        <desc id="flowDesc">Shopify connects to Google Apps Script which connects to Google Workspace
+                            apps and third‑party APIs.</desc>
+                        <defs>
+                            <linearGradient id="g1" x1="0" x2="1">
+                                <stop offset="0%" stop-color="#5ad08a" />
+                                <stop offset="100%" stop-color="#4cc9f0" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="10" y="10" width="660" height="260" rx="16" fill="#0f1520" stroke="#1b2636" />
+                        <g>
+                            <rect x="40" y="60" width="160" height="80" rx="12" fill="#111824" stroke="#1b2636" />
+                            <text x="120" y="105" text-anchor="middle" fill="#cfe0ff">Shopify API</text>
+                        </g>
+                        <g>
+                            <rect x="260" y="40" width="160" height="120" rx="14" fill="#111824" stroke="#1b2636" />
+                            <text x="340" y="90" text-anchor="middle" fill="#cfe0ff" font-weight="700">Google Apps
+                                Script</text>
+                            <text x="340" y="112" text-anchor="middle" fill="#95a7bf" font-size="12">Triggers · Webhooks
+                                · Queues</text>
+                        </g>
+                        <g>
+                            <rect x="480" y="40" width="160" height="60" rx="12" fill="#111824" stroke="#1b2636" />
+                            <text x="560" y="75" text-anchor="middle" fill="#cfe0ff">Google Sheets</text>
+                            <rect x="480" y="110" width="160" height="60" rx="12" fill="#111824" stroke="#1b2636" />
+                            <text x="560" y="145" text-anchor="middle" fill="#cfe0ff">Gmail / Drive</text>
+                        </g>
+                        <g>
+                            <rect x="480" y="190" width="160" height="60" rx="12" fill="#111824" stroke="#1b2636" />
+                            <text x="560" y="225" text-anchor="middle" fill="#cfe0ff">Discord / ESPs</text>
+                        </g>
+                        <path d="M200 100 L260 100" stroke="url(#g1)" stroke-width="3" />
+                        <path d="M420 80 L480 80" stroke="url(#g1)" stroke-width="3" />
+                        <path d="M420 120 L480 140" stroke="url(#g1)" stroke-width="3" />
+                        <path d="M420 160 L480 220" stroke="url(#g1)" stroke-width="3" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: Contact ===== -->
+        <section class="section" id="contact" aria-labelledby="contactTitle">
+            <div class="container">
+                <h2 id="contactTitle">Contact</h2>
+                <p class="muted">Not sure where to start? Describe your current manual process — I’ll suggest an
+                    automation path.</p>
+                <div class="grid cols-2" style="gap:var(--gutter)">
+                    <div class="card">
+                        <form name="contact" method="post" data-netlify="true">
+                            <input type="hidden" name="form-name" value="contact">
+                            <label>
+                                <span class="sr-only">Your Name</span>
+                                <input type="text" name="name" placeholder="Your name" required>
+                            </label>
+                            <label>
+                                <span class="sr-only">Email</span>
+                                <input type="email" name="email" placeholder="Email" required>
+                            </label>
+                            <label>
+                                <span class="sr-only">Message</span>
+                                <textarea name="message" placeholder="What do you want to automate?"
+                                    required></textarea>
+                            </label>
+                            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                                <button type="submit" class="btn">Send Message</button>
+                                <a class="btn outline"
+                                    href="mailto:hello@example.com?subject=GAS%20×%20Shopify%20automation"
+                                    aria-label="Email link">Email instead</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>What to include</h3>
+                        <ul>
+                            <li>Your store URL & current workflow</li>
+                            <li>Which data (orders, inventory, customers)</li>
+                            <li>How often it runs (e.g., hourly, daily)</li>
+                            <li>Who needs the output (team, tool, inbox)</li>
+                        </ul>
+                        <div class="spacer"></div>
+                        <h3>Response Time</h3>
+                        <p class="muted">I usually respond within 1 business day with clarifying questions or a ballpark
+                            quote.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Section: Blog Teaser ===== -->
+        <section class="section" id="blog" aria-labelledby="blogTitle">
+            <div class="container">
+                <h2 id="blogTitle">Blog (coming soon)</h2>
+                <div class="grid cols-3" style="margin-top:16px">
+                    <div class="card">
+                        <h3>5 Practical Shopify × Sheets Automations</h3>
+                        <p class="muted">Quick wins you can deploy this month to cut repetitive admin work.</p>
+                        <a class="btn outline" href="#">Preview</a>
+                    </div>
+                    <div class="card">
+                        <h3>Daily Sales Email in 30 Minutes</h3>
+                        <p class="muted">A step‑by‑step guide using GA4 API + Apps Script + Gmail.</p>
+                        <a class="btn outline" href="#">Preview</a>
+                    </div>
+                    <div class="card">
+                        <h3>Rate Limits & Queues in Apps Script</h3>
+                        <p class="muted">Design patterns to stay reliable with Shopify and Google APIs.</p>
+                        <a class="btn outline" href="#">Preview</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+        <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+            <div>© <span id="y"></span> GAS × Shopify Automation</div>
+            <div class="chips">
+                <span class="tag">Privacy</span>
+                <span class="tag">Terms</span>
+                <a class="tag" href="#home">Back to top ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =======================
+       Scripts (Navigation, utilities)
+       ======================= -->
+    <button id="toTop" aria-label="Back to top">↑</button>
+    <script>
+        // Mobile nav toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        if (navToggle) {
+            navToggle.addEventListener('click', () => {
+                const open = navLinks.classList.toggle('open');
+                navToggle.setAttribute('aria-expanded', String(open));
+            });
+        }
+
+        // Smooth scroll for same‑page links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const id = a.getAttribute('href');
+                if (id.length > 1) {
+                    const el = document.querySelector(id);
+                    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                }
+                // Close mobile menu after click
+                if (navLinks && navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+
+        // Back to top button visibility
+        const toTop = document.getElementById('toTop');
+        const onScroll = () => { toTop.style.display = window.scrollY > 600 ? 'block' : 'none'; };
+        window.addEventListener('scroll', onScroll);
+        toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Dynamic year
+        document.getElementById('y').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
